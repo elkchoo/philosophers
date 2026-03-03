@@ -18,9 +18,9 @@
 int	wait_till(t_info *info, t_philo *philo, unsigned long long timemcs,
 				unsigned long long death_mcs)
 {
-	struct timeval			now;
-	unsigned long long		now_mcs;
-	int						run;
+	struct timeval		now;
+	unsigned long long	now_mcs;
+	int					run;
 
 	pthread_mutex_lock(&info->r_mutex);
 	run = info->run;

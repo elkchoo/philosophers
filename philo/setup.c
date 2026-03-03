@@ -29,7 +29,6 @@ void	setup(int eat_limit, char *argv[], t_info *info)
 	pthread_mutex_init(&(info->r_mutex), NULL);
 	pthread_mutex_init(&(info->p_num_mutex), NULL);
 	pthread_mutex_init(&(info->print_mutex), NULL);
-	pthread_mutex_init(&(info->end_time_mutex), NULL);
 	if (eat_limit)
 		pthread_mutex_init(&(info->eat_lim_mutex), NULL);
 	info->total_philo = (int)ft_atoll(argv[1]);
@@ -46,7 +45,6 @@ void	setup(int eat_limit, char *argv[], t_info *info)
 	info->eat_limit = (int)ft_atoll(argv[4 + eat_limit]) * eat_limit;
 	info->fully_eaten = 0;
 	info->run = 1;
-	info->end_mcs = 0;
 }
 
 void	set_start_time(t_info *info)

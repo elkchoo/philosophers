@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   print_log.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: elkan <elkan@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/29 14:46:13 by Elkan Choo        #+#    #+#             */
-/*   Updated: 2026/02/11 20:18:26 by elkan            ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   print_log.c										:+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: elkan <elkan@student.42.fr>				+#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2026/01/29 14:46:13 by Elkan Choo		#+#	#+#			 */
+/*   Updated: 2026/02/11 20:18:26 by elkan			###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 // act 0: timestamp_in_mcs X has taken a fork
@@ -24,32 +24,32 @@
 
 // Note: For death, now_ms given will be death_mcs, so now_ms is equivalent
 // to death_mcs
-int	print_log(int act, t_info *info,
-			unsigned long long now_ms, int philo_num)
+int	print_log(int act, t_info *info, int philo_num)
 {
-	uint8_t				run;
+	struct timeval		now;
+	unsigned long long	now_ms;
 
-	pthread_mutex_lock(&info->print_mutex);
 	pthread_mutex_lock(&info->r_mutex);
-	run = info->run;
+	if (!info->run)
+		return (pthread_mutex_unlock(&info->r_mutex), 1);
 	pthread_mutex_unlock(&info->r_mutex);
-	if (!run)
-		return (pthread_mutex_unlock(&info->print_mutex), 1);
+	pthread_mutex_lock(&info->print_mutex);
+	gettimeofday(&now, NULL);
+	now_ms = (now.tv_sec * 1000000 + now.tv_usec - info->start_mcs) / 1000;
 	if (act == 0)
-		printf("%llu %i has taken a fork\n", now_ms / 1000, philo_num);
+		printf("%llu %i has taken a fork\n", now_ms, philo_num);
 	else if (act == 1)
-		printf("%llu %i is eating\n", now_ms / 1000, philo_num);
+		printf("%llu %i is eating\n", now_ms, philo_num);
 	else if (act == 2)
-		printf("%llu %i is sleeping\n", now_ms / 1000, philo_num);
+		printf("%llu %i is sleeping\n", now_ms, philo_num);
 	else if (act == 3)
-		printf("%llu %i is thinking\n", now_ms / 1000, philo_num);
+		printf("%llu %i is thinking\n", now_ms, philo_num);
 	else if (act == 4)
 	{
-		printf("%llu %i died\n", now_ms / 1000, philo_num);
+		printf("%llu %i died\n", now_ms, philo_num);
 		pthread_mutex_lock(&info->r_mutex);
 		info->run = 0;
 		pthread_mutex_unlock(&info->r_mutex);
 	}
-	pthread_mutex_unlock(&info->print_mutex);
-	return (0);
+	return (pthread_mutex_unlock(&info->print_mutex), 0);
 }

@@ -86,7 +86,7 @@ void	grab_fork(t_info *info, t_philo *philo, int fork)
 		pthread_mutex_unlock(&info->m_forks[fork]);
 		gettimeofday(&time, NULL);
 		time_ms = time.tv_sec * 1000000 + time.tv_usec;
-		print_log(0, info, time_ms - info->start_mcs, philo->philo_num);
+		print_log(0, info, philo->philo_num);
 		philo->forks_held++;
 	}
 	else

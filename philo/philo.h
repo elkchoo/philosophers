@@ -66,8 +66,7 @@ int					update_times(t_info *info, t_philo *philo,
 						long long unsigned int time_ate_mcs);
 
 // from print_log.c
-int					print_log(int act, t_info *info,
-						unsigned long long now_ms, int philo_num);
+int					print_log(int act, t_info *info, int philo_num);
 
 // from wait_till.c
 int					wait_till(t_info *info, t_philo *philo,

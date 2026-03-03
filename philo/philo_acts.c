@@ -33,10 +33,10 @@ void	*philosopher_act(void *i)
 		if (eat_and_wait(info, &philo))
 			return (NULL);
 		return_forks(info, &philo);
-		print_log(2, info, philo.sleep_mcs - info->start_mcs, philo.philo_num);
-		if (wait_till(info, &philo, philo.sleep_mcs, philo.die_mcs))
+		print_log(2, info, philo.philo_num);
+		if (wait_till(info, &philo, philo.wake_mcs, philo.die_mcs))
 			return (NULL);
-		print_log(3, info, philo.wake_mcs - info->start_mcs, philo.philo_num);
+		print_log(3, info, philo.philo_num);
 		pthread_mutex_lock(&info->r_mutex);
 		if (!info->run)
 			return (pthread_mutex_unlock(&info->r_mutex), NULL);
@@ -54,7 +54,7 @@ int	eat_and_wait(t_info *info, t_philo *philo)
 	time_ate_ms = eating(info, philo);
 	if (!time_ate_ms)
 		return (1);
-	print_log(1, info, time_ate_ms - info->start_mcs, philo->philo_num);
+	print_log(1, info, philo->philo_num);
 	manage_eat_limit(info, philo);
 	if (update_times(info, philo, time_ate_ms))
 		return (1);

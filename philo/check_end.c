@@ -23,7 +23,7 @@ int	check_death(t_info *info, t_philo *philo, unsigned long long now_mcs,
 {
 	if (now_mcs >= death_mcs)
 	{
-		print_log(4, info, death_mcs - info->start_mcs, philo->philo_num);
+		print_log(4, info, philo->philo_num);
 		return (1);
 	}
 	return (0);
