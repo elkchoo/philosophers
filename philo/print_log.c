@@ -22,18 +22,19 @@
 #include <pthread.h>
 #include <sys/time.h>
 
-// Note: For death, now_ms given will be death_mcs, so now_ms is equivalent
-// to death_mcs
+void	print_death(t_info *info, int philo_num, unsigned long long now_ms);
+
 int	print_log(int act, t_info *info, int philo_num)
 {
 	struct timeval		now;
 	unsigned long long	now_ms;
 
+	pthread_mutex_lock(&info->print_mutex);
 	pthread_mutex_lock(&info->r_mutex);
 	if (!info->run)
-		return (pthread_mutex_unlock(&info->r_mutex), 1);
+		return (pthread_mutex_unlock(&info->r_mutex),
+			pthread_mutex_unlock(&info->print_mutex), 1);
 	pthread_mutex_unlock(&info->r_mutex);
-	pthread_mutex_lock(&info->print_mutex);
 	gettimeofday(&now, NULL);
 	now_ms = (now.tv_sec * 1000000 + now.tv_usec - info->start_mcs) / 1000;
 	if (act == 0)
@@ -45,11 +46,14 @@ int	print_log(int act, t_info *info, int philo_num)
 	else if (act == 3)
 		printf("%llu %i is thinking\n", now_ms, philo_num);
 	else if (act == 4)
-	{
-		printf("%llu %i died\n", now_ms, philo_num);
-		pthread_mutex_lock(&info->r_mutex);
-		info->run = 0;
-		pthread_mutex_unlock(&info->r_mutex);
-	}
+		print_death(info, philo_num, now_ms);
 	return (pthread_mutex_unlock(&info->print_mutex), 0);
+}
+
+void	print_death(t_info *info, int philo_num, unsigned long long now_ms)
+{
+	pthread_mutex_lock(&info->r_mutex);
+	info->run = 0;
+	pthread_mutex_unlock(&info->r_mutex);
+	printf("%llu %i died\n", now_ms, philo_num);
 }
