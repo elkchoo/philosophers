@@ -10,7 +10,8 @@
 #                                                                              #
 # **************************************************************************** #
 
-SOURCES = $(wildcard *.c)
+SOURCES = check_end.c eating.c ft_atoll.c main.c philo_acts.c print_log.c \
+setup.c shutdown.c wait_till.c
 
 OBJECTS = $(SOURCES:%.c=%.o)
 
